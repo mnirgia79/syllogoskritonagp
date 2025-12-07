@@ -10,7 +10,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const navItems = [
     { href: "/", label: "Αρχική" },
     { href: "/events", label: "Εκδηλώσεις" },
-    { href: "/about", label: "Ο Σύλλογος" },
+    { href: "/courses", label: "Τμήματα" },
+    { 
+      label: "Ο Σύλλογος", 
+      children: [
+        { href: "/about", label: "Σχετικά με εμάς" },
+        { href: "/history", label: "Ιστορία" },
+        { href: "/council", label: "Διοικητικό Συμβούλιο" },
+        { href: "/statute", label: "Καταστατικό" },
+      ]
+    },
     { href: "/contact", label: "Επικοινωνία" },
   ];
 
@@ -45,20 +54,44 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
-            {navItems.map((item) => (
-              <Link 
-                key={item.href} 
-                href={item.href}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary relative py-1",
-                  location === item.href 
-                    ? "text-primary font-bold after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-secondary" 
-                    : "text-muted-foreground"
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              if (item.children) {
+                return (
+                  <div key={item.label} className="relative group cursor-pointer">
+                    <span className={cn(
+                      "text-sm font-medium transition-colors hover:text-primary py-1 flex items-center gap-1",
+                      item.children.some(child => location === child.href) ? "text-primary font-bold" : "text-muted-foreground"
+                    )}>
+                      {item.label}
+                    </span>
+                    <div className="absolute top-full left-0 w-48 bg-card shadow-lg rounded-md border p-2 hidden group-hover:block animate-in fade-in zoom-in-95 duration-200">
+                      {item.children.map(child => (
+                        <Link key={child.href} href={child.href}>
+                          <a className={cn(
+                            "block px-4 py-2 text-sm rounded-sm hover:bg-muted transition-colors",
+                            location === child.href ? "text-primary font-bold bg-muted/50" : "text-foreground"
+                          )}>
+                            {child.label}
+                          </a>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <Link key={item.href} href={item.href!}>
+                  <a className={cn(
+                    "text-sm font-medium transition-colors hover:text-primary relative py-1",
+                    location === item.href 
+                      ? "text-primary font-bold after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-secondary" 
+                      : "text-muted-foreground"
+                  )}>
+                    {item.label}
+                  </a>
+                </Link>
+              );
+            })}
             <Link href="/contact" className="bg-primary text-primary-foreground hover:bg-primary/90 px-5 py-2 rounded-full text-sm font-medium transition-colors">
               Γίνε Μέλος
             </Link>
@@ -75,23 +108,49 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Nav */}
         {isMobileMenuOpen && (
-          <div className="md:hidden border-t bg-background p-4 flex flex-col gap-4 animate-in slide-in-from-top-5">
-            {navItems.map((item) => (
-              <Link 
-                key={item.href} 
-                href={item.href}
-                className={cn(
-                  "block p-2 text-lg font-medium rounded-md hover:bg-muted",
-                  location === item.href ? "text-primary bg-muted/50" : "text-foreground"
-                )}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
+          <div className="md:hidden border-t bg-background p-4 flex flex-col gap-4 animate-in slide-in-from-top-5 max-h-[calc(100vh-80px)] overflow-y-auto">
+            {navItems.map((item) => {
+              if (item.children) {
+                return (
+                  <div key={item.label} className="space-y-2">
+                    <span className="block p-2 text-lg font-medium text-foreground opacity-50 uppercase tracking-widest text-xs">
+                      {item.label}
+                    </span>
+                    <div className="pl-4 space-y-2 border-l ml-2">
+                      {item.children.map(child => (
+                        <Link key={child.href} href={child.href}>
+                          <a 
+                            className={cn(
+                              "block p-2 text-base font-medium rounded-md hover:bg-muted",
+                              location === child.href ? "text-primary bg-muted/50" : "text-foreground"
+                            )}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
+                            {child.label}
+                          </a>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+              return (
+                <Link key={item.href} href={item.href!}>
+                  <a 
+                    className={cn(
+                      "block p-2 text-lg font-medium rounded-md hover:bg-muted",
+                      location === item.href ? "text-primary bg-muted/50" : "text-foreground"
+                    )}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                </Link>
+              );
+            })}
             <Link 
               href="/contact"
-              className="block w-full text-center bg-primary text-primary-foreground p-3 rounded-md font-medium"
+              className="block w-full text-center bg-primary text-primary-foreground p-3 rounded-md font-medium mt-4"
               onClick={() => setIsMobileMenuOpen(false)}
             >
               Γίνε Μέλος
