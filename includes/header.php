@@ -34,6 +34,7 @@
                 </li>
                 <li><a href="#about">Ο Σύλλογος</a></li>
                 <li><a href="#events">Εκδηλώσεις</a></li>
+                <li><a href="#announcements">Νέα</a></li>
                 <li><a href="#multimedia">Πολυμέσα</a></li>
                 <li><a href="#contact" class="cta-button">Επικοινωνία</a></li>
             </ul>

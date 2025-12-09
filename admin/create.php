@@ -11,7 +11,14 @@
             <label for="title">Τίτλος</label>
             <input type="text" id="title" name="title" required>
         </div>
-
+        <div class="form-group">
+            <label for="type">Τύπος</label>
+            <select id="type" name="type"
+                style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; background: white;">
+                <option value="event">Εκδήλωση</option>
+                <option value="announcement">Ανακοίνωση</option>
+            </select>
+        </div>
         <div class="form-group">
             <label for="event_date">Ημερομηνία Εκδήλωσης</label>
             <input type="date" id="event_date" name="event_date" required>

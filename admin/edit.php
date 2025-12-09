@@ -29,32 +29,40 @@ if (!$announcement) {
             <label for="title">Τίτλος</label>
             <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($announcement['title']); ?>"
                 required>
-        </div>
+            <div class="form-group">
+                <label for="type">Τύπος</label>
+                <select id="type" name="type"
+                    style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; background: white;">
+                    <option value="event" <?php echo ($announcement['type'] ?? 'event') == 'event' ? 'selected' : ''; ?>>
+                        Εκδήλωση</option>
+                    <option value="announcement" <?php echo ($announcement['type'] ?? '') == 'announcement' ? 'selected' : ''; ?>>Ανακοίνωση</option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="event_date">Ημερομηνία Εκδήλωσης</label>
-            <input type="date" id="event_date" name="event_date" value="<?php echo $announcement['event_date']; ?>"
-                required>
-        </div>
+            <div class="form-group">
+                <label for="event_date">Ημερομηνία Εκδήλωσης</label>
+                <input type="date" id="event_date" name="event_date" value="<?php echo $announcement['event_date']; ?>"
+                    required>
+            </div>
 
-        <div class="form-group">
-            <label for="image">Νέα Εικόνα (Αφήστε κενό για διατήρηση)</label>
-            <?php if ($announcement['image_path']): ?>
-                <div style="margin-bottom: 0.5rem;">
-                    <img src="../<?php echo htmlspecialchars($announcement['image_path']); ?>" alt="Current Image"
-                        style="height: 100px; border-radius: 4px;">
-                </div>
-            <?php endif; ?>
-            <input type="file" id="image" name="image" accept="image/*">
-        </div>
+            <div class="form-group">
+                <label for="image">Νέα Εικόνα (Αφήστε κενό για διατήρηση)</label>
+                <?php if ($announcement['image_path']): ?>
+                    <div style="margin-bottom: 0.5rem;">
+                        <img src="../<?php echo htmlspecialchars($announcement['image_path']); ?>" alt="Current Image"
+                            style="height: 100px; border-radius: 4px;">
+                    </div>
+                <?php endif; ?>
+                <input type="file" id="image" name="image" accept="image/*">
+            </div>
 
-        <div class="form-group">
-            <label for="content">Περιγραφή</label>
-            <textarea id="content" name="content"
-                required><?php echo htmlspecialchars($announcement['content']); ?></textarea>
-        </div>
+            <div class="form-group">
+                <label for="content">Περιγραφή</label>
+                <textarea id="content" name="content"
+                    required><?php echo htmlspecialchars($announcement['content']); ?></textarea>
+            </div>
 
-        <button type="submit" class="btn">Ενημέρωση</button>
+            <button type="submit" class="btn">Ενημέρωση</button>
     </form>
 </div>
 

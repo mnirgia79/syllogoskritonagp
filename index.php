@@ -25,24 +25,28 @@
 </section>
 
 <?php
-// Fetch latest 3 announcements
+// Fetch latest 3 events
 try {
     require_once 'includes/db_connect.php';
-    $stmt = $conn->query("SELECT * FROM announcements ORDER BY event_date DESC LIMIT 3");
-    $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt_events = $conn->query("SELECT * FROM announcements WHERE type = 'event' ORDER BY event_date DESC LIMIT 3");
+    $events = $stmt_events->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt_announcements = $conn->query("SELECT * FROM announcements WHERE type = 'announcement' ORDER BY created_at DESC LIMIT 3");
+    $recent_announcements = $stmt_announcements->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    $announcements = [];
+    $events = [];
+    $recent_announcements = [];
 }
 ?>
 
 <!-- Events Section -->
 <section id="events" class="section" style="background-color: var(--light-gray);">
     <div class="container">
-        <h2 class="section-title">Τελευταία Νέα & Ανακοινώσεις</h2>
+        <h2 class="section-title">Εκδηλώσεις</h2>
 
-        <?php if (count($announcements) > 0): ?>
+        <?php if (count($events) > 0): ?>
             <div class="grid">
-                <?php foreach ($announcements as $ann): ?>
+                <?php foreach ($events as $ann): ?>
                     <article class="card">
                         <div class="card-image"
                             style="background-image: url('<?php echo $ann['image_path'] ? htmlspecialchars($ann['image_path']) : 'https://images.unsplash.com/photo-1543050097-eb63b272f3d6?q=80&w=1968&auto=format&fit=crop'; ?>');">
@@ -61,15 +65,40 @@ try {
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <p style="text-align: center;">Δεν υπάρχουν ακόμη ανακοινώσεις.</p>
+            <p style="text-align: center;">Δεν υπάρχουν ακόμη προγραμματισμένες εκδηλώσεις.</p>
         <?php endif; ?>
+    </div>
+</section>
 
-        <div style="text-align: center; margin-top: 3rem;">
-            <!-- Optionally link to a full archive page later -->
-            <a href="#" class="btn-primary"
-                style="background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color);">Όλες
-                οι Ανακοινώσεις</a>
-        </div>
+<!-- Announcements Section -->
+<section id="announcements" class="section">
+    <div class="container">
+        <h2 class="section-title">Νέα & Ανακοινώσεις</h2>
+
+        <?php if (count($recent_announcements) > 0): ?>
+            <div class="grid">
+                <?php foreach ($recent_announcements as $ann): ?>
+                    <article class="card">
+                        <!-- Announcements might need a different default image, or no image if desired. Using same style for consistency. -->
+                        <div class="card-image"
+                            style="background-image: url('<?php echo $ann['image_path'] ? htmlspecialchars($ann['image_path']) : 'https://images.unsplash.com/photo-1505567745926-ba89000d255a?q=80&w=2071&auto=format&fit=crop'; ?>');">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-date">
+                                <?php
+                                setlocale(LC_TIME, 'el_GR.UTF-8');
+                                echo date("d/m/Y", strtotime($ann['event_date']));
+                                ?>
+                            </div>
+                            <h3 class="card-title"><?php echo htmlspecialchars($ann['title']); ?></h3>
+                            <p><?php echo mb_substr(strip_tags($ann['content']), 0, 100) . '...'; ?></p>
+                        </div>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p style="text-align: center;">Δεν υπάρχουν πρόσφατες ανακοινώσεις.</p>
+        <?php endif; ?>
     </div>
 </section>
 

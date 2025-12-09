@@ -18,6 +18,7 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <tr>
                 <th>Εικόνα</th>
                 <th>Τίτλος</th>
+                <th>Τύπος</th>
                 <th>Ημερομηνία</th>
                 <th>Ενέργειες</th>
             </tr>
@@ -33,6 +34,12 @@ $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?php endif; ?>
                     </td>
                     <td><?php echo htmlspecialchars($ann['title']); ?></td>
+                    <td>
+                        <span
+                            style="padding: 4px 8px; border-radius: 4px; background: <?php echo ($ann['type'] ?? 'event') == 'event' ? '#e1f5fe' : '#fff3e0'; ?>; color: <?php echo ($ann['type'] ?? 'event') == 'event' ? '#0277bd' : '#ef6c00'; ?>;">
+                            <?php echo ($ann['type'] ?? 'event') == 'event' ? 'Εκδήλωση' : 'Ανακοίνωση'; ?>
+                        </span>
+                    </td>
                     <td>
                         <?php
                         // Format date to Greek format if possible, or just standard
